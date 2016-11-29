@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/touch/jquery-3.1.0.js"></script>
+    <script src="js/touch/touch.js"></script>
+</head>
+<style>
+    .wheel{
+        width: 100%;
+        height:600px;
+        /*        border: 1px solid black;*/
+        overflow: hidden;
+    }
+    .box{
+        width:400%;
+        height:100%;
+    }
+    .box a{
+        display: block;
+        float: left;
+        width: 25%;
+        height:100%;
+        text-align: center;
+        line-height: 200px;
+        font-size: 50px;
+        color: #fff;
+        text-decoration: none;
+    }
+    .box a:nth-child(1){
+        background:red
+
+    }
+    .box a:nth-child(2){
+        background:blue;
+    }
+    .box a:nth-child(3){
+        background:orange;
+    }
+
+</style>
+<script>
+    $(function(){
+        var marginL;
+        var num=0;
+        var width=$(".wheel").width();
+        touch.on("body","dragstart",".box",function(e){
+            e.preventDefault();
+            $(".box").css({
+                transition:"none"
+            })
+            marginL=parseInt($(".box").css("marginLeft")?parseInt($(".box").css("marginLeft")):0)
+
+        })
+
+        touch.on("body","drag",".box",function(e){
+            $(".box").css({
+                transition:"none",
+                marginLeft:marginL+e.x
+            })
+        })
+        touch.on("body","dragend",".box",function(e){
+            if(Math.abs(e.x)>200){
+                if(e.direction=="left"){
+                    num++;
+                    if(num==$(".box a").length){
+                        num=$(".box a").length-1;
+                    }
+                    $(".box").css({
+                        marginLeft:-num*width,
+                        transition:"margin 1s ease"
+                    })
+                }else if(e.direction=="right"){
+                    num--;
+                    if(num==-1){
+                        num=0;
+                    }
+                    $(".box").css({
+                        marginLeft:-num*width,
+                        transition:"margin 1s ease"
+                    })
+                }
+            }else{
+                $(".box").css({
+                    marginLeft:-num*width,
+                    transition:"margin 1s ease"
+                })
+            }
+        })
+    })
+</script>
+<body>
+<div class="wheel">
+    <div class="box">
+        <a href="#"></a>
+        <a href="#"></a>
+        <a href="#"></a>
+    </div>
+</div>
+</body>
+<html>
